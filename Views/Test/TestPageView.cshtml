@@ -1,0 +1,19 @@
+﻿@using TestApp.Models.TestModels;
+@model Quiz
+
+@{
+    ViewData["Title"] = "Test Page";
+}
+
+<div class="quiz__head">
+    <div class="head__content" id="test">@Model.Title</div>
+    <div class="head__content" id="test">@Model.Description</div>
+</div>
+
+<div>
+    <label>I agree to start</label><br />
+    <form onsubmit="return checkForm(this);">
+        <p><input type="checkbox" required name="terms"> I accept the <u>Terms and Conditions</u></p>
+        <button> @Html.ActionLink("Proceed", "QuestionsView", "Test", new { title = Model.Title }) </button>
+    </form>
+</div>
