@@ -14,6 +14,6 @@
     <label>I agree to start</label><br />
     <form onsubmit="return checkForm(this);">
         <p><input type="checkbox" required name="terms"> I accept the <u>Terms and Conditions</u></p>
-        <button> @Html.ActionLink("Proceed", "QuestionsView", "Test", new { title = Model.Title }) </button>
+        <button> @Html.ActionLink("Proceed", "Question", "Test", new { quizId = Model.Id }) </button>
     </form>
 </div>

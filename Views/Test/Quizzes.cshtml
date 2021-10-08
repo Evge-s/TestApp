@@ -1,0 +1,18 @@
+﻿@using TestApp.Models.TestModels;
+@using TestApp.Models.DataModels
+@model IndexViewModel<Quiz>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<table class="table">
+    <div>
+        @foreach (var item in Model.Set)
+        {
+            <li>
+                @item.Title
+                @Html.ActionLink("Start", "Test", "Test", new { id = @item.Id })
+            </li>
+        }
+    </div>
+</table>

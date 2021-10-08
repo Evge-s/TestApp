@@ -17,7 +17,7 @@ namespace TestApp.Controllers
         public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated)
-                return RedirectToAction("QuizzesPage", "Test");
+                return RedirectToAction("Quizzes", "Test");
             return View();
         }
 

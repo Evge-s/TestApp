@@ -1,5 +1,5 @@
 ﻿@using TestApp.Models.TestModels;
-@model Question;
+@model Question
 
 <div class="wrapper">
     <main class="main">
@@ -11,11 +11,10 @@
                 <div class="buttons__content" id="buttons">
                     @foreach (var item in Model.Answers)
                     {
-                    <button class="button">@Html.ActionLink(@item.Text, "Answer", "Test", new { result = item.Result })</button><br>
+                        <button class="button">@Html.ActionLink(@item.Text, "AnswerResult", "Test", new {questId = Model.Id})</button><br>
                     }
                 </div>
             </div>
-
             <div class="quiz__footer">
                 <div class="footer__content" id="pages">0 / 0</div>
             </div>

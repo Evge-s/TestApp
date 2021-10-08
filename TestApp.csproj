@@ -23,16 +23,6 @@
     <Resource Include="Data\TestsData\Test2.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Test1.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Resources\Test1.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\Test2.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
   <ItemGroup>

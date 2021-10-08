@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 using TestApp.Models.DataModels;
 using TestApp.Models.TestModels;
 using TestApp.Models.ViewModels;
@@ -12,13 +13,20 @@ namespace TestApp.Controllers
     [Authorize]
     public class TestController : Controller
     {
-        private List<Quiz> quizzes = QuizGenerator.Quizzes();
-
-        public IActionResult QuizzesPage(int page = 1)
+        private DataContext db;
+        private Random rnd = new Random();
+        public TestController(DataContext context)
         {
-            int pageSize = 10;
+            db = context;
+            QuizGenerator.InitializeQuizzes(db);
+        }
 
-            IQueryable<Quiz> source = quizzes.AsQueryable();
+        public async Task<IActionResult> Quizzes(int page = 1)
+        {
+            int val = rnd.Next(1, 150);
+            int pageSize = 3;
+
+            IQueryable<Quiz> source = db.Quizzes.Where(x => x.Id >= val & x.Id <= val + 3).AsQueryable();
             var count = source.Count();
             var items = source.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
@@ -31,19 +39,24 @@ namespace TestApp.Controllers
             return View(viewModel);
         }
 
-        public IActionResult TestPageView(string title)
+        public IActionResult Test(int id)
         {
-            return View(FindQuiz(title));
+            return View(FindQuiz(id));
         }
 
-        public IActionResult QuestionsView(string title)
+        public IActionResult Question(int quizId)
         {
-            return View(FindQuiz(title).Questions);
+            return View(db.Questions.Where(x => x.QuizId == quizId).FirstOrDefault());
         }
 
-        private Quiz FindQuiz(string title)
+        public IActionResult AnswerResult(int questId)
         {
-            return quizzes.Find(x => x.Title == title);
+            return View(db.Questions.FirstOrDefault(x => x.Id == questId));
         }
+
+        private Quiz FindQuiz(int id)
+        {
+            return db.Quizzes.FirstOrDefault(x => x.Id == id);
+        }        
     }
 }

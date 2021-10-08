@@ -1,9 +1,0 @@
-﻿@using TestApp.Models.TestModels;
-@model List<Question>;
-
-@foreach (var item in Model)
-{
-    <div>
-        @await Html.PartialAsync("QuestionView.cshtml", item)
-    </div>
-}

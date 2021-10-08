@@ -1,44 +1,51 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using TestApp.Models.DataModels;
 using TestApp.Models.TestModels;
 
 namespace TestApp.Resources
 {
     public class QuizGenerator
     {
-        public static List<Quiz> Quizzes()
+        public async static void InitializeQuizzes(DataContext db)
         {
-            List<Quiz> quizzes = new List<Quiz>();
-            for (int i = 1; i < 50; i++)
+            if (db.Quizzes.FirstOrDefault() == null)
             {
-                quizzes.Add(new Quiz(
-                    $"Test {i}", $"Description of Test {i}", questions
-                    ));
+                for (int i = 1; i < 200; i++)
+                {
+                    db.Quizzes.Add(new Quiz(
+                        $"Test {i}", $"Description of Test {i}", Questions(i)
+                        ));
+                }
+                await db.SaveChangesAsync();
             }
-            return quizzes;
         }
 
-        public static List<Question> questions = new List<Question>
+        public static List<Question> Questions(int i)
         {
-            new Question()
+            return new List<Question>()
             {
-                Title = "1+1",
-                Answers = new List<Answer>
+               new Question()
                 {
-                    new Answer {Text = "1", Result = false },
-                    new Answer {Text = "2", Result = true },
-                    new Answer {Text = "3", Result = false },
-                }
-            },
-            new Question()
-            {
-                Title = "2+2",
-                Answers = new List<Answer>
+                    Title = $"{i} + {i}",
+                        Answers = new List<Answer>
+                        {
+                            new Answer { Text = $"{i}", Result = false },
+                            new Answer { Text = $"{i + i}", Result = true },
+                            new Answer { Text = $"{i+i/2}", Result = false },
+                        }
+                },
+                new Question()
                 {
-                    new Answer {Text = "1", Result = false },
-                    new Answer {Text = "4", Result = true },
-                    new Answer {Text = "3", Result = false },
+                    Title = $"{i} * {i}",
+                    Answers = new List<Answer>
+                    {
+                            new Answer { Text = $"{i + i - i/2}", Result = false },
+                            new Answer { Text = $"{i + i}", Result = false },
+                            new Answer { Text = $"{i * i}", Result = true },
+                    }
                 }
-            }
-        };
+            };
+        }
     }
 }
