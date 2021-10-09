@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,22 +22,15 @@ namespace TestApp.Controllers
             QuizGenerator.InitializeQuizzes(db);
         }
 
-        public async Task<IActionResult> Quizzes(int page = 1)
+        public async Task<IActionResult> Quizzes(int? pageNumber)
         {
             int val = rnd.Next(1, 150);
             int pageSize = 3;
 
-            IQueryable<Quiz> source = db.Quizzes.Where(x => x.Id >= val & x.Id <= val + 3).AsQueryable();
-            var count = source.Count();
-            var items = source.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-
-            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
-            IndexViewModel<Quiz> viewModel = new IndexViewModel<Quiz>
-            {
-                PageViewModel = pageViewModel,
-                Set = items
-            };
-            return View(viewModel);
+            var quizzes = from s in db.Quizzes.Where(x => x.Id >= val & x.Id <= val + 5)
+            select s;
+            
+            return View(await PaginatedList<Quiz>.CreateAsync(quizzes.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         public IActionResult Test(int id)

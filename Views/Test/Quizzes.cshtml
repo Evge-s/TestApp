@@ -1,13 +1,12 @@
-﻿@using TestApp.Models.TestModels;
-@using TestApp.Models.DataModels
-@model IndexViewModel<Quiz>
+﻿@using TestApp.Models.ViewModels;
+@model PaginatedList<TestApp.Models.TestModels.Quiz>
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Quizzes Page";
 }
 
 <table class="table">
     <div>
-        @foreach (var item in Model.Set)
+        @foreach (var item in Model)
         {
             <li>
                 @item.Title
@@ -16,3 +15,19 @@
         }
     </div>
 </table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Quizzes"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   class="btn btn-outline-dark @prevDisabled">
+    Previous
+</a>
+<a asp-action="Quizzes"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   class="btn btn-outline-dark @nextDisabled">
+    Next
+</a>
